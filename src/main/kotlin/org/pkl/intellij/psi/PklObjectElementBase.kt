@@ -16,23 +16,19 @@
 package org.pkl.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
-import org.pkl.intellij.packages.dto.PklProject
-import org.pkl.intellij.type.Type
-import org.pkl.intellij.type.TypeParameterBindings
+import com.intellij.navigation.ItemPresentation
+import javax.swing.Icon
+import org.pkl.intellij.util.toDisplayText
 
-abstract class PklObjectMemberBase(node: ASTNode) : PklAstWrapperPsiElement(node), PklObjectMember {
-  override fun getName(): String? = null
+abstract class PklObjectElementBase(node: ASTNode) : PklObjectMemberBase(node), PklObjectElement {
+  override fun getIcon(flags: Int): Icon? = null
 
-  override fun getNameIdentifier(): PsiElement? = null
+  override fun getPresentation(): ItemPresentation =
+    object : ItemPresentation {
+      override fun getLocationString(): String? = null
 
-  override fun getLookupElementType(
-    base: PklBaseModule,
-    bindings: TypeParameterBindings,
-    context: PklProject?
-  ): Type {
-    throw AssertionError("This method should have been overridden by ${this::class.qualifiedName}.")
-  }
+      override fun getIcon(unused: Boolean): Icon? = null
 
-  override fun toString(): String = super.toString() + "($name)"
+      override fun getPresentableText(): String? = expr.toDisplayText()
+    }
 }
